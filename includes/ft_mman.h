@@ -6,7 +6,7 @@
 /*   By: pdeguing <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/13 09:37:40 by pdeguing          #+#    #+#             */
-/*   Updated: 2018/12/13 11:24:26 by pdeguing         ###   ########.fr       */
+/*   Updated: 2018/12/13 14:08:52 by pdeguing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,9 @@ struct						t_obj
 
 t_obj						*g_cache[CLASS_TOTAL];
 
-void						free(void *ptr);
+//void						free(void *ptr);
 void						*malloc(size_t size);
-void						*realloc(void *ptr, size_t size);
+//void						*realloc(void *ptr, size_t size);
 
 void						show_alloc_mem(void);
 

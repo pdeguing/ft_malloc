@@ -6,7 +6,7 @@
 /*   By: pdeguing <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/13 11:02:23 by pdeguing          #+#    #+#             */
-/*   Updated: 2018/12/13 11:15:13 by pdeguing         ###   ########.fr       */
+/*   Updated: 2018/12/13 14:10:26 by pdeguing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,12 @@ int		main(void)
 	char	*str;
 	int		i;
 
+	ft_putstr("malloc[");
 	str = (char *)malloc(sizeof(char) * 5);	
+	ft_putstr("]\n");
 	if (!str)
 	{
-		ft_printf("str = NULL\n");
+		ft_putendl("str = NULL");
 		return (0);
 	}
 	i = 0;
@@ -31,6 +33,7 @@ int		main(void)
 		i++;
 	}
 	str[i] = '\0';
-	ft_printf("str = %s\n", str);
+	ft_putstr("str = ");
+	ft_putendl(str);
 	return (0);
 }

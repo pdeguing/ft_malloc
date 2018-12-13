@@ -6,7 +6,7 @@
 #    By: pdeguing <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/12/07 11:01:28 by pdeguing          #+#    #+#              #
-#    Updated: 2018/12/13 12:02:23 by pdeguing         ###   ########.fr        #
+#    Updated: 2018/12/13 14:13:07 by pdeguing         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,7 @@ CFLAGS			:= -Wall -Wextra -Werror
 ALL				:= ft_malloc.c ft_free.c ft_realloc.c
 SRCS			:= $(addprefix $(SRCDIR)/, $(ALL))
 
-all: $(LIBFT) $(NAME)
+all: $(LIBFT) $(NAME) test
 
 $(LIBFT):
 	@ cd libft/ && make
@@ -44,10 +44,11 @@ clean:
 
 fclean: clean
 	@ /bin/rm -f $(NAME)
+	@ /bin/rm -f unit_test
 	@ /bin/rm -f libft_malloc.so
 	@ cd libft/ && make fclean
 
-re: fclean all
+re: fclean all test
 
 norm:
 	@ norminette *.c *.h

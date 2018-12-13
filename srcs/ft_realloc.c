@@ -6,12 +6,13 @@
 /*   By: pdeguing <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/12 12:35:03 by pdeguing          #+#    #+#             */
-/*   Updated: 2018/12/13 07:51:24 by pdeguing         ###   ########.fr       */
+/*   Updated: 2018/12/13 14:08:47 by pdeguing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <ft_mman.h>
 
+/*
 void	*realloc(void *ptr, size_t size)
 {
 	void	*new;
@@ -23,3 +24,4 @@ void	*realloc(void *ptr, size_t size)
 	free(ptr);
 	return (new);
 }
+*/
