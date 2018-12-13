@@ -6,25 +6,25 @@
 /*   By: pdeguing <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/12 12:27:35 by pdeguing          #+#    #+#             */
-/*   Updated: 2018/12/13 09:53:53 by pdeguing         ###   ########.fr       */
+/*   Updated: 2018/12/13 11:28:53 by pdeguing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <ft_mman.h>
 
-int		cache_available(size_t size)
+static int		cache_available(size_t size)
 {
 	(void)size;
 	return (0);
 }
 
-void	*cache_retrieve(size_t size)
+static void		*cache_retrieve(size_t size)
 {
 	(void)size;
 	return (NULL);
 }
 
-void	*allocate_mem(size_t size)
+static void		*allocate_mem(size_t size)
 {
 	void	*ptr;
 
@@ -36,9 +36,10 @@ void	*allocate_mem(size_t size)
 
 void	*malloc(size_t size)
 {
-	void	*ptr;
+	struct rlimit	rlp;
 
-	if (!size || size > getrlimit())
+	getrlimit(RLIMIT_DATA, &rlp);
+	if (!size || size > rlp.rlim_cur)
 		return (NULL);
 	if (cache_available(size))
 		return (cache_retrieve(size));

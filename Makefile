@@ -6,7 +6,7 @@
 #    By: pdeguing <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/12/07 11:01:28 by pdeguing          #+#    #+#              #
-#    Updated: 2018/12/13 07:54:05 by pdeguing         ###   ########.fr        #
+#    Updated: 2018/12/13 12:02:23 by pdeguing         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,6 @@ endif
 
 NAME			:= libft_malloc_$(HOSTTYPE).so
 SRCDIR			:= srcs
-OBJDIR			:= obj_$(HOSTTYPE)
 
 INCLUDES		:= -I ./includes/ -I ./libft/includes/
 LIBFT			:= libft/libft.a
@@ -27,23 +26,18 @@ CFLAGS			:= -Wall -Wextra -Werror
 
 ALL				:= ft_malloc.c ft_free.c ft_realloc.c
 SRCS			:= $(addprefix $(SRCDIR)/, $(ALL))
-OBJECTS			:= $(addprefix $(OBJDIR)/, $(patsubst %.c, %.o, $(ALL)))
 
 all: $(LIBFT) $(NAME)
 
 $(LIBFT):
 	@ cd libft/ && make
 
-$(NAME): $(OBJECTS)
-	@ ar rcs $@ $^
-	@ ranlib $@
+$(NAME):
+	@ gcc $(CFLAGS) -shared -o $@ $(INCLUDES) $(LIBFT) $(SRCS)
 	@ ln -sf $@ libft_malloc.so
 
-$(OBJDIR)/%.o: $(SRCDIR)/%.c | $(OBJDIR)
-	@ $(CC) -c $(CFLAGS) $(INCLUDES) $< -o $@
-
-$(OBJDIR):
-	@ mkdir $(OBJDIR)
+test: $(LIBFT)
+	@ $(CC) $(CFLAGS) $(INCLUDES) $(LIBFT) unit_test.c -o unit_test
 
 clean:
 	@ /bin/rm -rf $(OBJDIR)
