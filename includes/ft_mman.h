@@ -1,23 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_malloc.c                                        :+:      :+:    :+:   */
+/*   ft_malloc.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pdeguing <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/12/12 12:27:35 by pdeguing          #+#    #+#             */
-/*   Updated: 2018/12/12 12:36:57 by pdeguing         ###   ########.fr       */
+/*   Created: 2018/12/12 11:42:36 by pdeguing          #+#    #+#             */
+/*   Updated: 2018/12/13 07:18:52 by pdeguing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <ft_malloc.h>
+#ifndef FT_MALLOC_H
+# define FT_MALLOC_H
 
-void	*malloc(size_t size)
-{
-	void	*ptr;
+# include <stdlib.h>
+# include <sys/mman.h>
+# include <libft.h>
 
-	ptr = mmap(0, size, PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0);
-	if (ptr == MAP_FAILED)
-		return (NULL);
-	return (ptr);
-}
+void		free(void *ptr);
+void		*malloc(size_t size);
+void		*realloc(void *ptr, size_t size);
+
+void		show_alloc_mem(void);
+
+/* bonus */
+
+void		show_alloc_mem_ex(void);
+
+#endif

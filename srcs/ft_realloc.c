@@ -1,29 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_malloc.h                                        :+:      :+:    :+:   */
+/*   ft_realloc.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pdeguing <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/12/12 11:42:36 by pdeguing          #+#    #+#             */
-/*   Updated: 2018/12/12 12:44:55 by pdeguing         ###   ########.fr       */
+/*   Created: 2018/12/12 12:35:03 by pdeguing          #+#    #+#             */
+/*   Updated: 2018/12/13 07:51:24 by pdeguing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_MALLOC_H
-# define FT_MALLOC_H
+#include <ft_mman.h>
 
-# include <stdlib.h>
-# include <sys/mman.h>
+void	*realloc(void *ptr, size_t size)
+{
+	void	*new;
 
-void		free(void *ptr);
-void		*malloc(size_t size);
-void		*realloc(void *ptr, size_t size);
-
-void		show_alloc_mem(void);
-
-/* bonus */
-
-void		show_alloc_mem_ex(void);
-
-#endif
+	new = mmap(0, size, PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0);
+	if (new == MAP_FAILED)
+		return (NULL);
+	ft_memcpy(new, ptr, size);
+	free(ptr);
+	return (new);
+}

@@ -6,7 +6,7 @@
 #    By: pdeguing <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/12/07 11:01:28 by pdeguing          #+#    #+#              #
-#    Updated: 2018/12/12 12:44:56 by pdeguing         ###   ########.fr        #
+#    Updated: 2018/12/13 07:54:05 by pdeguing         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,32 +14,44 @@ ifeq ($(HOSTTYPE),)
 	HOSTTYPE	:= $(shell uname -m)_$(shell uname -s)
 endif
 
-NAME			= libft_malloc_$(HOSTTYPE).so
+NAME			:= libft_malloc_$(HOSTTYPE).so
+SRCDIR			:= srcs
+OBJDIR			:= obj_$(HOSTTYPE)
 
-CFLAGS			= -Wall -Wextra -Werror
+INCLUDES		:= -I ./includes/ -I ./libft/includes/
+LIBFT			:= libft/libft.a
 
-SRCS			= ft_malloc.c ft_free.c ft_realloc.c
+CC				:= gcc
+CFLAGS			:= -Wall -Wextra -Werror
 
-LIBFT			= libft/libft.a
 
-all: $(NAME)
+ALL				:= ft_malloc.c ft_free.c ft_realloc.c
+SRCS			:= $(addprefix $(SRCDIR)/, $(ALL))
+OBJECTS			:= $(addprefix $(OBJDIR)/, $(patsubst %.c, %.o, $(ALL)))
 
-$(NAME): cmp
-	@ ar rcs $(NAME) *.o
-	@ ranlib $(NAME)
-	@ ln -sf $(NAME) libft_malloc.so
+all: $(LIBFT) $(NAME)
 
 $(LIBFT):
 	@ cd libft/ && make
 
-cmp:
-	@ gcc -c $(CFLAGS) $(SRCS) $(LIBFT)
+$(NAME): $(OBJECTS)
+	@ ar rcs $@ $^
+	@ ranlib $@
+	@ ln -sf $@ libft_malloc.so
+
+$(OBJDIR)/%.o: $(SRCDIR)/%.c | $(OBJDIR)
+	@ $(CC) -c $(CFLAGS) $(INCLUDES) $< -o $@
+
+$(OBJDIR):
+	@ mkdir $(OBJDIR)
 
 clean:
-	@ /bin/rm -f *.o
+	@ /bin/rm -rf $(OBJDIR)
 
 fclean: clean
 	@ /bin/rm -f $(NAME)
+	@ /bin/rm -f libft_malloc.so
+	@ cd libft/ && make fclean
 
 re: fclean all
 
