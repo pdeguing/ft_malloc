@@ -6,7 +6,7 @@
 /*   By: pdeguing <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/13 09:37:40 by pdeguing          #+#    #+#             */
-/*   Updated: 2018/12/14 12:40:21 by pdeguing         ###   ########.fr       */
+/*   Updated: 2018/12/15 11:49:46 by pdeguing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,10 @@ t_span						*g_cache[CLASS_TOTAL];
 
 int							cache_check_availability(size_t size);
 void						*cache_pull(size_t size);
-void						cache_push_object(void *ptr, t_span span);
-void						cache_push_span(t_span span, size_t size);
+void						cache_push_object(void *ptr, t_span *span);
+void						cache_push_span(t_span *span, size_t size);
 
-t_span						span_create(size_t size);
+t_span						*span_create(size_t size);
 
 //void						free(void *ptr);
 void						*malloc(size_t size);

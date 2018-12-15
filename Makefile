@@ -6,7 +6,7 @@
 #    By: pdeguing <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/12/07 11:01:28 by pdeguing          #+#    #+#              #
-#    Updated: 2018/12/14 12:23:30 by pdeguing         ###   ########.fr        #
+#    Updated: 2018/12/15 12:06:52 by pdeguing         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,7 +38,7 @@ $(NAME):
 	@ ln -sf $@ libft_malloc.so
 
 test: $(LIBFT)
-	@ $(CC) $(CFLAGS) $(INCLUDES) $(LIBFT) unit_test.c -o unit_test
+	@ $(CC) $(CFLAGS) -g -fsanitize=address $(INCLUDES) $(LIBFT) $(SRCS) unit_test.c -o unit_test
 
 clean:
 	@ /bin/rm -rf $(OBJDIR)
