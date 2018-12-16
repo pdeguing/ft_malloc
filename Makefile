@@ -6,7 +6,7 @@
 #    By: pdeguing <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/12/07 11:01:28 by pdeguing          #+#    #+#              #
-#    Updated: 2018/12/15 12:06:52 by pdeguing         ###   ########.fr        #
+#    Updated: 2018/12/15 16:20:46 by pdeguing         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,7 @@ CFLAGS			:= -Wall -Wextra -Werror
 
 
 ALL				:= ft_malloc.c ft_free.c ft_realloc.c \
-					span.c cache.c
+					span.c cache.c large_object.c
 SRCS			:= $(addprefix $(SRCDIR)/, $(ALL))
 
 all: $(LIBFT) $(NAME) test
