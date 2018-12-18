@@ -1,25 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_free.c                                          :+:      :+:    :+:   */
+/*   memory.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pdeguing <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/12/12 12:34:09 by pdeguing          #+#    #+#             */
-/*   Updated: 2018/12/18 08:47:51 by pdeguing         ###   ########.fr       */
+/*   Created: 2018/12/18 08:25:20 by pdeguing          #+#    #+#             */
+/*   Updated: 2018/12/18 08:35:47 by pdeguing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <ft_mman.h>
 
-void		free(void *ptr)
+void	*request_memory(size_t size)
 {
-	t_metadata	*block;
+	void	*ptr;
+	t_metadata	*new;
 
-	if (!ptr)
-		return ;
-	block = (t_metadata *)ptr;
-	block = block - 1;
-	block->next = NULL;
-	free_list_push(&g_free_list, block);
+	ptr = mmap(0, size + sizeof(t_metadata),
+			PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0);
+	if (ptr == MAP_FAILED || !ptr)
+		return (NULL);
+	new = (t_metadata *)ptr;
+	new->size = size;
+	new->next = NULL;
+	return (new + 1);
 }

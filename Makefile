@@ -6,7 +6,7 @@
 #    By: pdeguing <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/12/07 11:01:28 by pdeguing          #+#    #+#              #
-#    Updated: 2018/12/15 16:20:46 by pdeguing         ###   ########.fr        #
+#    Updated: 2018/12/18 08:40:10 by pdeguing         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,11 +24,12 @@ CC				:= gcc
 CFLAGS			:= -Wall -Wextra -Werror
 
 
-ALL				:= ft_malloc.c ft_free.c ft_realloc.c \
-					span.c cache.c large_object.c
+ALL				:= ft_malloc.c ft_free.c ft_realloc.c\
+					memory.c free_list.c
+
 SRCS			:= $(addprefix $(SRCDIR)/, $(ALL))
 
-all: $(LIBFT) $(NAME) test
+all: $(LIBFT) $(NAME)
 
 $(LIBFT):
 	@ cd libft/ && make
@@ -37,19 +38,15 @@ $(NAME):
 	@ gcc $(CFLAGS) -shared -o $@ $(INCLUDES) $(LIBFT) $(SRCS)
 	@ ln -sf $@ libft_malloc.so
 
-test: $(LIBFT)
-	@ $(CC) $(CFLAGS) -g -fsanitize=address $(INCLUDES) $(LIBFT) $(SRCS) unit_test.c -o unit_test
-
 clean:
 	@ /bin/rm -rf $(OBJDIR)
 
 fclean: clean
 	@ /bin/rm -f $(NAME)
-	@ /bin/rm -f unit_test
 	@ /bin/rm -f libft_malloc.so
 	@ cd libft/ && make fclean
 
-re: fclean all test
+re: fclean all
 
 norm:
 	@ norminette *.c *.h

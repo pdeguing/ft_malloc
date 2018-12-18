@@ -6,64 +6,42 @@
 /*   By: pdeguing <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/13 09:37:40 by pdeguing          #+#    #+#             */
-/*   Updated: 2018/12/15 16:24:44 by pdeguing         ###   ########.fr       */
+/*   Updated: 2018/12/18 08:52:43 by pdeguing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FT_MMAN_H
 # define FT_MMAN_H
 
+# define BLACK				"\x1b[1m"
+# define BLUE				"\x1b[0;34m"
+# define RED				"\x1b[1;31m"
+# define PINK				"\x1b[1;35m"
+# define WHITE				"\x1b[1;37m"
+# define RESET				"\x1b[0m"
+
 # include <stdlib.h>
 # include <sys/mman.h>
 # include <sys/resource.h>
 # include <libft.h>
 
-# define CLASS_TOTAL		3
-# define INDEX_LARGE		2
-# define LARGE_META			32
+typedef struct s_metadata	t_metadata;
 
-enum e_class
-{
-	TINY	= 8,
-	SMALL	= 1024,
-	LARGE
-};
-
-typedef struct s_obj		t_obj;
-
-struct						s_obj
-{
-	t_obj					*next;
-};
-
-typedef struct s_large		t_large;
-
-struct						s_large
+struct						s_metadata
 {
 	size_t					size;
-	void					*ptr;
+	t_metadata				*next;
 };
 
-typedef struct s_span		t_span;
+t_metadata					*g_free_list;
 
-struct						s_span
-{
-	void					*data;
-	t_span					*next;
-};
+void						*request_memory(size_t size);
 
-t_span						*g_cache[CLASS_TOTAL];
+int							free_list_is_empty(t_metadata **free_list);
+void						*free_list_pop(t_metadata **free_list, size_t size);
+void						free_list_push(t_metadata **free_list, t_metadata *block);
 
-void						*large_object(size_t size);
-
-void						*cache_pull(int index);
-void						*cache_pull_large(size_t size);
-void						cache_push_object(void *ptr, t_span *span);
-void						cache_push_span(t_span *span, int index);
-
-t_span						*span_create(size_t size);
-
-//void						free(void *ptr);
+void						free(void *ptr);
 void						*malloc(size_t size);
 //void						*realloc(void *ptr, size_t size);
 
