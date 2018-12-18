@@ -6,7 +6,7 @@
 /*   By: pdeguing <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/18 08:14:43 by pdeguing          #+#    #+#             */
-/*   Updated: 2018/12/18 08:52:42 by pdeguing         ###   ########.fr       */
+/*   Updated: 2018/12/18 11:59:30 by pdeguing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,14 @@ void		*free_list_pop(t_metadata **free_list, size_t size)
 	prev = NULL;
 	while (head)
 	{
-		if (head->size >= size)
+		if (head->free && head->size >= size)
 		{
 			if (prev)
 				prev->next = head->next;
 			else
 				*free_list = head->next;
 			ret = head + 1;
-			return (ret);
+			return ((void *)ret);
 		}
 		prev = head;
 		head = head->next;
@@ -48,6 +48,17 @@ void		*free_list_pop(t_metadata **free_list, size_t size)
 
 void		free_list_push(t_metadata **free_list, t_metadata *block)
 {
+	ft_putstr("size = ");
+	ft_putnbr(block->size);
+	ft_putchar('\n');
+	ft_putstr("next = ");
+	ft_putnbr((int)block->next);
+	ft_putchar('\n');
+	ft_putstr("free = ");
+	ft_putnbr(block->free);
+	ft_putchar('\n');
+	if (!block)
+		return ;
 	if (free_list_is_empty(free_list))
 	{
 		*free_list = block;
