@@ -6,7 +6,7 @@
 /*   By: pdeguing <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/13 09:37:40 by pdeguing          #+#    #+#             */
-/*   Updated: 2018/12/18 11:50:25 by pdeguing         ###   ########.fr       */
+/*   Updated: 2018/12/18 14:47:28 by pdeguing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,9 @@
 # include <sys/resource.h>
 # include <libft.h>
 
-# define TINY				48
+# define META_SIZE			16
+
+# define TINY				16	
 # define SMALL				1024
 
 typedef struct s_metadata	t_metadata;

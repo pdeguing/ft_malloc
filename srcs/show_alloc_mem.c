@@ -1,34 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_free.c                                          :+:      :+:    :+:   */
+/*   show_alloc_mem.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pdeguing <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/12/12 12:34:09 by pdeguing          #+#    #+#             */
-/*   Updated: 2018/12/18 13:40:56 by pdeguing         ###   ########.fr       */
+/*   Created: 2018/12/18 13:08:48 by pdeguing          #+#    #+#             */
+/*   Updated: 2018/12/18 13:28:33 by pdeguing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <ft_mman.h>
 
-static void	*get_block(void *ptr)
+void		show_alloc_mem(void)
 {
-	return ((char *)ptr - META_SIZE);
-}
+	t_metadata	*head;
 
-void		free(void *ptr)
-{
-	t_metadata	*block;
-
-//	ft_putendl(BLUE"in free"RESET);
-	if (!ptr)
-		return ;
-	block = get_block(ptr);
-//	ft_putendl(BLUE"block->free"RESET);
-	block->free = 1;
-//	ft_putstr("block->size = ");
-//	ft_putnbr(block->size);
-//	ft_putchar('\n');
-//	ft_putendl(BLUE"out free"RESET);
+	head = g_free_list;
+	ft_printf("memory state:\n");
+	while (head)
+	{
+		ft_printf("%p - %p : %10d bytes (%d)\n", head + 1, (char *)head + head->size, head->size, head->free);
+		head = head->next;
+	}
 }

@@ -6,7 +6,7 @@
 /*   By: pdeguing <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/18 08:25:20 by pdeguing          #+#    #+#             */
-/*   Updated: 2018/12/18 11:59:29 by pdeguing         ###   ########.fr       */
+/*   Updated: 2018/12/18 13:19:20 by pdeguing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,9 @@ void	*request_memory(size_t size)
 	size_t	request_size;
 
 	request_size = request_size_get(size);
-	ft_putstr("request_size = ");
-	ft_putnbr(request_size);
-	ft_putchar('\n');
+//	ft_putstr("request_size = ");
+//	ft_putnbr(request_size);
+//	ft_putchar('\n');
 	ptr = mmap(0, request_size,
 			PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0);
 	if (ptr == MAP_FAILED || !ptr)

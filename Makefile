@@ -6,7 +6,7 @@
 #    By: pdeguing <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/12/07 11:01:28 by pdeguing          #+#    #+#              #
-#    Updated: 2018/12/18 08:40:10 by pdeguing         ###   ########.fr        #
+#    Updated: 2018/12/18 13:16:04 by pdeguing         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,11 +25,11 @@ CFLAGS			:= -Wall -Wextra -Werror
 
 
 ALL				:= ft_malloc.c ft_free.c ft_realloc.c\
-					memory.c free_list.c
+					memory.c free_list.c show_alloc_mem.c
 
 SRCS			:= $(addprefix $(SRCDIR)/, $(ALL))
 
-all: $(LIBFT) $(NAME)
+all: $(LIBFT) $(NAME) test
 
 $(LIBFT):
 	@ cd libft/ && make
@@ -38,12 +38,16 @@ $(NAME):
 	@ gcc $(CFLAGS) -shared -o $@ $(INCLUDES) $(LIBFT) $(SRCS)
 	@ ln -sf $@ libft_malloc.so
 
+test: $(LIBFT)
+	@ $(CC) $(CFLAGS) -g -fsanitize=address $(INCLUDES) $(LIBFT) $(SRCS) test_main.c -o test_main
+
 clean:
 	@ /bin/rm -rf $(OBJDIR)
 
 fclean: clean
 	@ /bin/rm -f $(NAME)
 	@ /bin/rm -f libft_malloc.so
+	@ /bin/rm -f test_main
 	@ cd libft/ && make fclean
 
 re: fclean all
