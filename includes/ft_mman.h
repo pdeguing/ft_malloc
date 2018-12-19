@@ -6,7 +6,7 @@
 /*   By: pdeguing <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/13 09:37:40 by pdeguing          #+#    #+#             */
-/*   Updated: 2018/12/18 11:50:25 by pdeguing         ###   ########.fr       */
+/*   Updated: 2018/12/18 16:18:15 by pdeguing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,25 +25,19 @@
 # include <sys/resource.h>
 # include <libft.h>
 
+# define ALIGNMENT			8
+# define ALIGN(size)		(((size) + (ALIGNMENT - 1)) & ~(ALIGNMENT - 1))
+# define HEADER_SIZE		(ALIGN(sizeof(size_t)))
+
+# define ALLOCATED			1
+# define FREE				~1L
+
 # define TINY				48
 # define SMALL				1024
 
-typedef struct s_metadata	t_metadata;
 
-struct						s_metadata
-{
-	size_t					size;
-	t_metadata				*next;
-	int						free;
-};
+void						*g_heap;
 
-t_metadata					*g_free_list;
-
-void						*request_memory(size_t size);
-
-int							free_list_is_empty(t_metadata **free_list);
-void						*free_list_pop(t_metadata **free_list, size_t size);
-void						free_list_push(t_metadata **free_list, t_metadata *block);
 
 void						free(void *ptr);
 void						*malloc(size_t size);

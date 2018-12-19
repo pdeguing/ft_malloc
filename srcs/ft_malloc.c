@@ -6,7 +6,7 @@
 /*   By: pdeguing <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/12 12:27:35 by pdeguing          #+#    #+#             */
-/*   Updated: 2018/12/18 11:59:31 by pdeguing         ###   ########.fr       */
+/*   Updated: 2018/12/18 16:18:14 by pdeguing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,25 @@
 
 void	*malloc(size_t size)
 {
-	void			*ptr;
-	struct rlimit	rlp;
+//	struct rlimit	rlp;
+	size_t			block_size;
+	size_t			*header;
+//	static int		init;
 
-	ft_putendl(RED"in malloc"RESET);
-	getrlimit(RLIMIT_DATA, &rlp);
-	if (!size || size > rlp.rlim_cur)
-		return (NULL);
-	ptr = free_list_pop(&g_free_list, size);
-	if (!ptr)
-	{
-		ft_putendl(RED"mmap"RESET);
-		ptr = request_memory(size);
-		free_list_push(&g_free_list, (t_metadata *)ptr - 1);
-	}
-	ft_putendl(RED"out malloc"RESET);
-	return (ptr);
+//	getrlimit(RLIMIT_DATA, &rlp);
+//	if (!size || size > rlp.rlim_cur)
+//		return (NULL);
+//	if (!init)
+//	{
+//		header = mmap(0, HEADER_SIZE,
+//				PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0);
+//		init = 1;
+//		*header = 0;
+//		g_heap = header;
+//	}
+	block_size = ALIGN(size + HEADER_SIZE);
+	header = mmap(0, block_size,
+			PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0);
+	*header = block_size | ALLOCATED;
+	return ((char *)header + HEADER_SIZE);
 }
