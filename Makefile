@@ -6,7 +6,7 @@
 #    By: pdeguing <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/12/07 11:01:28 by pdeguing          #+#    #+#              #
-#    Updated: 2018/12/18 15:29:54 by pdeguing         ###   ########.fr        #
+#    Updated: 2018/12/19 10:33:32 by pdeguing         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,7 @@ CC				:= gcc
 CFLAGS			:= -Wall -Wextra -Werror
 
 
-ALL				:= ft_malloc.c ft_free.c ft_realloc.c show_alloc_mem.c\
+ALL				:= ft_malloc.c ft_free.c ft_realloc.c ft_calloc.c show_alloc_mem.c\
 
 SRCS			:= $(addprefix $(SRCDIR)/, $(ALL))
 

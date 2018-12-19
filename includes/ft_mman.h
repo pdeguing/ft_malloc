@@ -6,7 +6,7 @@
 /*   By: pdeguing <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/13 09:37:40 by pdeguing          #+#    #+#             */
-/*   Updated: 2018/12/18 16:18:15 by pdeguing         ###   ########.fr       */
+/*   Updated: 2018/12/19 12:50:22 by pdeguing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,11 @@
 # define WHITE				"\x1b[1;37m"
 # define RESET				"\x1b[0m"
 
-# include <stdlib.h>
 # include <sys/mman.h>
 # include <sys/resource.h>
 # include <libft.h>
 
-# define ALIGNMENT			8
+# define ALIGNMENT			16
 # define ALIGN(size)		(((size) + (ALIGNMENT - 1)) & ~(ALIGNMENT - 1))
 # define HEADER_SIZE		(ALIGN(sizeof(size_t)))
 
@@ -42,6 +41,7 @@ void						*g_heap;
 void						free(void *ptr);
 void						*malloc(size_t size);
 void						*realloc(void *ptr, size_t size);
+void						*calloc(size_t count, size_t size);
 
 void						show_alloc_mem(void);
 

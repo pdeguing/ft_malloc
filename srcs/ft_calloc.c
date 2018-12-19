@@ -1,34 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_malloc.c                                        :+:      :+:    :+:   */
+/*   ft_calloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pdeguing <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/12/12 12:27:35 by pdeguing          #+#    #+#             */
-/*   Updated: 2018/12/19 10:29:39 by pdeguing         ###   ########.fr       */
+/*   Created: 2018/12/19 10:29:51 by pdeguing          #+#    #+#             */
+/*   Updated: 2018/12/19 10:34:26 by pdeguing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <ft_mman.h>
 
-void	*malloc(size_t size)
+void	*calloc(size_t count, size_t size)
 {
-	struct rlimit	rlp;
-	size_t			block_size;
-	size_t			*header;
+	size_t	alloc_size;
+	void	*ptr;
 
-	ft_putendl(RED"in malloc"RESET);
-	ft_putnbr(size);
-	ft_putchar('\n');
-	getrlimit(RLIMIT_DATA, &rlp);
-	if (!size || size > rlp.rlim_cur)
+	ft_putendl(BLUE"in calloc"RESET);
+	if (!count || !size)
 		return (NULL);
-	block_size = ALIGN(size + HEADER_SIZE);
-	header = mmap(0, block_size,
-			PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0);
-	if (header == MAP_FAILED || !header)
+	alloc_size = count * size;
+	ptr = malloc(alloc_size);
+	if (!ptr)
 		return (NULL);
-	*header = block_size | ALLOCATED;
-	return ((char *)header + HEADER_SIZE);
+	ft_bzero(ptr, alloc_size);
+	return (ptr);
 }
