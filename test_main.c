@@ -6,7 +6,7 @@
 /*   By: pdeguing <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/18 15:07:12 by pdeguing          #+#    #+#             */
-/*   Updated: 2018/12/19 09:20:39 by pdeguing         ###   ########.fr       */
+/*   Updated: 2018/12/20 11:47:24 by pdeguing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,6 @@ void	basic_malloc(int size)
 
 int		main(void)
 {
-	ft_putchar('\n');
-	ft_putendl("--------------------------------------------------");
-	ft_putendl(RED"getpagesize()"RESET);
-	ft_putchar('\n');
-	ft_putnbr(getpagesize());
-	ft_putchar('\n');
 	ft_putchar('\n');
 	ft_putendl("--------------------------------------------------");
 	ft_putendl(RED"basic_malloc()"RESET);

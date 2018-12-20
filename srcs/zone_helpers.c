@@ -1,30 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_calloc.c                                        :+:      :+:    :+:   */
+/*   zone_helpers.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pdeguing <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/12/19 10:29:51 by pdeguing          #+#    #+#             */
-/*   Updated: 2018/12/20 12:26:36 by pdeguing         ###   ########.fr       */
+/*   Created: 2018/12/20 10:41:16 by pdeguing          #+#    #+#             */
+/*   Updated: 2018/12/20 11:39:39 by pdeguing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <ft_mman.h>
 
-void	*calloc(size_t count, size_t size)
+size_t	get_zone_size(size_t size)
 {
-	size_t	alloc_size;
-	void	*ptr;
-
-	_PUTSTR_(BLUE"calloc: in"RESET);
-	if (!count || !size)
-		return (NULL);
-	alloc_size = count * size;
-	ptr = malloc(alloc_size);
-	if (!ptr)
-		return (NULL);
-	ft_bzero(ptr, alloc_size);
-	_PUTSTR_(BLUE"calloc: out"RESET);
-	return (ptr);
+	if (IS_TINY(size))
+		return (ZONE_TINY);
+	else if (IS_SMALL(size))
+		return (ZONE_SMALL);
+	return (ZONE_LARGE(size));
 }
+
+int		get_zone_list_index(size_t size)
+{
+	if (IS_TINY(size))
+		return (INDEX_TINY);
+	else if (IS_SMALL(size))
+		return (INDEX_SMALL);
+	return (INDEX_LARGE);
+}
+
