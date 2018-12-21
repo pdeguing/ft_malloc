@@ -6,7 +6,7 @@
 /*   By: pdeguing <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/20 10:42:34 by pdeguing          #+#    #+#             */
-/*   Updated: 2018/12/20 18:30:46 by pdeguing         ###   ########.fr       */
+/*   Updated: 2018/12/21 12:25:16 by pdeguing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,14 @@ static t_zone	*malloc_zone_create(size_t zone_size)
 	return (zone);
 }
 
-static void	*malloc_zone_free_list_retrieve(t_zone *zone, t_free *free_block, t_free *prev_block, size_t request_size)
+void	*malloc_zone_free_list_retrieve(t_zone *zone, t_free *free_block, t_free *prev_block, size_t request_size)
 {
 	t_free	*new_block;
 	void	*ptr;
 
 	new_block = free_block;
 	//_PUTNBR_("free_block->size", new_block->size);
+	//_PUTFREE_(zone->list);
 	if (free_block->size > request_size)
 	{
 		free_block = (t_free *)((char *)free_block + request_size);
@@ -123,19 +124,22 @@ void	*malloc_zone_request_block(size_t request_size)
 	zone = g_zone_list[zone_list_index];
 	while (zone && !ptr)
 	{
+		//_PUTSTR_(RED"LOOP"RESET);
 		ptr = malloc_zone_retrieve_block(zone, request_size);
+		//_PUTZONE_(zone);
 		zone = zone->next;
 	}
 	if (!ptr)
 	{
+		//_PUTSTR_(RED"NO SPACE IN ZONE"RESET);
 		zone_size = get_zone_size(request_size);
 		if (IS_LARGE(request_size))
 			request_size -= T_ZONE_SIZE;
 		//_PUTNBR_("zone_size", zone_size);
 		zone = malloc_zone_create(zone_size);
-		//_PUTZONE_(zone);
 		ptr = malloc_zone_retrieve_block(zone, request_size);
 		malloc_zone_list_add(zone_list_index, zone);
+		//_PUTZONE_(zone);
 	}
 	return (ptr);
 }

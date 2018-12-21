@@ -6,13 +6,13 @@
 /*   By: pdeguing <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/12 12:27:35 by pdeguing          #+#    #+#             */
-/*   Updated: 2018/12/20 18:30:47 by pdeguing         ###   ########.fr       */
+/*   Updated: 2018/12/21 12:25:19 by pdeguing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <ft_mman.h>
 
-static size_t	align_request_size(size_t size)
+size_t	align_request_size(size_t size)
 {
 	if (IS_TINY(size))
 		return (ALIGN(ALIGN_TINY, size));

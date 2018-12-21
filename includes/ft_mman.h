@@ -6,7 +6,7 @@
 /*   By: pdeguing <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/13 09:37:40 by pdeguing          #+#    #+#             */
-/*   Updated: 2018/12/20 17:04:36 by pdeguing         ###   ########.fr       */
+/*   Updated: 2018/12/21 12:30:34 by pdeguing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 # include <sys/resource.h>
 # include <libft.h>
 
-# define _PUTSTR_(str)			ft_putendl(str);
+# define _PUTSTR_(str)			ft_putendl_fd(str, 2);
 
 # define _PUTNBR_(name, n)		ft_putstr(name);\
 								ft_putstr(" = ");\
@@ -85,7 +85,11 @@ size_t							get_zone_size(size_t size);
 int								get_zone_list_index(size_t size);
 t_zone							*get_zone(void *ptr);
 
+size_t							align_request_size(size_t size); // replace with a macro
+
 void							*malloc_zone_request_block(size_t request_size);
+void							*malloc_zone_free_list_retrieve(t_zone *zone,
+		t_free *free_block, t_free *prev_block, size_t request_size);
 
 void							free_zone_free_list_add(t_zone *zone, void *ptr);
 

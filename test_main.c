@@ -6,7 +6,7 @@
 /*   By: pdeguing <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/18 15:07:12 by pdeguing          #+#    #+#             */
-/*   Updated: 2018/12/20 17:42:33 by pdeguing         ###   ########.fr       */
+/*   Updated: 2018/12/21 12:30:50 by pdeguing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ void	basic_malloc(int size)
 		i++;
 	}
 	str[i] = '\0';
+	str = realloc(str, size * 100);
 	//ft_putstr("str = ");
 	//ft_putendl(str);
 	free(str);
@@ -43,10 +44,9 @@ int		main(void)
 	ft_putendl("--------------------------------------------------");
 	ft_putendl(RED"basic_malloc()"RESET);
 	ft_putchar('\n');
-	basic_malloc(16 * 1024 * 1024);
+//	basic_malloc(16 * 1024 * 1024);
 	ft_putchar('\n');
 	ft_putchar('\n');
-	/*
 	ft_putendl("--------------------------------------------------");
 	ft_putendl(RED"basic_malloc()"RESET);
 	ft_putchar('\n');
@@ -59,6 +59,5 @@ int		main(void)
 	basic_malloc(32);
 	ft_putchar('\n');
 	show_alloc_mem();
-	*/
 	return (0);
 }
