@@ -6,7 +6,7 @@
 #    By: pdeguing <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/12/07 11:01:28 by pdeguing          #+#    #+#              #
-#    Updated: 2018/12/20 13:06:38 by pdeguing         ###   ########.fr        #
+#    Updated: 2018/12/20 17:47:45 by pdeguing         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,8 +24,8 @@ CC				:= gcc
 CFLAGS			:= -Wall -Wextra -Werror
 
 
-ALL				:= ft_malloc.c ft_free.c show_alloc_mem.c\
-					malloc_zone.c zone_helpers.c
+ALL				:= ft_malloc.c ft_free.c ft_realloc.c show_alloc_mem.c\
+					malloc_zone.c free_zone.c zone_helpers.c
 
 SRCS			:= $(addprefix $(SRCDIR)/, $(ALL))
 
@@ -39,7 +39,7 @@ $(NAME):
 	@ ln -sf $@ libft_malloc.so
 
 test: $(LIBFT)
-	@ $(CC) $(CFLAGS) -g -fsanitize=address $(INCLUDES) $(LIBFT) $(SRCS) test_main.c -o test_main
+	@ $(CC) $(CFLAGS) $(INCLUDES) $(LIBFT) $(SRCS) test_main.c -o test_main
 
 clean:
 	@ /bin/rm -rf $(OBJDIR)

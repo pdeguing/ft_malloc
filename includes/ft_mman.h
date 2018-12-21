@@ -6,7 +6,7 @@
 /*   By: pdeguing <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/13 09:37:40 by pdeguing          #+#    #+#             */
-/*   Updated: 2018/12/20 13:34:15 by pdeguing         ###   ########.fr       */
+/*   Updated: 2018/12/20 17:04:36 by pdeguing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@
 
 # define _PUTZONE_(zone)		print_zone(zone);
 # define _PUTFREE_(list)		print_free_list(list);
+
+# define MIN(a, b)				((a > b) ? b : a)
 
 # define ALIGN_DFT				8
 # define ALIGN_TINY				16
@@ -81,12 +83,15 @@ t_zone							*g_zone_list[3];
 
 size_t							get_zone_size(size_t size);
 int								get_zone_list_index(size_t size);
+t_zone							*get_zone(void *ptr);
 
 void							*malloc_zone_request_block(size_t request_size);
 
+void							free_zone_free_list_add(t_zone *zone, void *ptr);
+
 void							free(void *ptr);
 void							*malloc(size_t size);
-//void							*realloc(void *ptr, size_t size);
+void							*realloc(void *ptr, size_t size);
 //void							*calloc(size_t count, size_t size);
 
 void							show_alloc_mem(void);

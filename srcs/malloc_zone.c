@@ -6,7 +6,7 @@
 /*   By: pdeguing <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/20 10:42:34 by pdeguing          #+#    #+#             */
-/*   Updated: 2018/12/20 13:05:33 by pdeguing         ###   ########.fr       */
+/*   Updated: 2018/12/20 18:30:46 by pdeguing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,8 @@ static void	*malloc_zone_retrieve_block(t_zone *zone, size_t request_size)
 	t_free	*free_block;
 	t_free	*prev_block;
 
-	//_PUTNBR_("zone->free_size", zone->free_size);
+	//_PUTNBR_(PINK"zone->free_size"RESET, zone->free_size);
+	//_PUTNBR_(PINK"request_size"RESET, request_size);
 	//_PUTFREE_(zone->list);
 	if (!zone->list || zone->free_size < request_size)
 		return (NULL);
@@ -115,6 +116,7 @@ void	*malloc_zone_request_block(size_t request_size)
 	size_t	zone_size;
 	int		zone_list_index;
 
+	//_PUTNBR_("request_size", request_size);
 	ptr = NULL;
 	zone_list_index = get_zone_list_index(request_size);
 	//_PUTNBR_("zone_list_index", zone_list_index);
@@ -127,6 +129,8 @@ void	*malloc_zone_request_block(size_t request_size)
 	if (!ptr)
 	{
 		zone_size = get_zone_size(request_size);
+		if (IS_LARGE(request_size))
+			request_size -= T_ZONE_SIZE;
 		//_PUTNBR_("zone_size", zone_size);
 		zone = malloc_zone_create(zone_size);
 		//_PUTZONE_(zone);
