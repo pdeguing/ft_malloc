@@ -6,22 +6,45 @@
 /*   By: pdeguing <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/12 12:35:03 by pdeguing          #+#    #+#             */
-/*   Updated: 2018/12/13 14:08:47 by pdeguing         ###   ########.fr       */
+/*   Updated: 2018/12/20 18:03:24 by pdeguing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <ft_mman.h>
 
-/*
 void	*realloc(void *ptr, size_t size)
 {
-	void	*new;
+	t_zone	*zone;
+	t_free	*ptr_block;
+	void	*new_ptr;
 
-	new = mmap(0, size, PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0);
-	if (new == MAP_FAILED)
+	//_PUTSTR_(BLUE"realloc: in"RESET);
+	//_PUTNBR_(BLUE"size"RESET, size);
+	if (!ptr)
+	{
+		//_PUTSTR_(BLUE"realloc: return (malloc)"RESET);
+		return (malloc(size));
+	}
+	zone = get_zone(ptr);
+	//_PUTSTR_(BLUE"realloc: get_zone"RESET);
+	if (!zone)
+	{
+		//_PUTSTR_(BLUE"realloc: !zone"RESET);
 		return (NULL);
-	ft_memcpy(new, ptr, size);
+	}
+	new_ptr = malloc(size);
+	//_PUTSTR_(BLUE"realloc: malloc"RESET);
+	if (!new_ptr)
+	{
+		//_PUTSTR_(BLUE"realloc: !new_ptr"RESET);
+		return (NULL);
+	}
+	ptr_block = (t_free *)((char *)ptr - SIZE_T_SIZE);
+	//_PUTNBR_(BLUE"ptr_size"RESET, ptr_block->size);
+	//_PUTNBR_(BLUE"MIN"RESET, MIN(ptr_block->size - T_FREE_SIZE, size));
+	ft_memcpy(new_ptr, ptr, MIN(ptr_block->size - T_FREE_SIZE, size));
+	//_PUTSTR_(BLUE"realloc: ft_memcpy"RESET);
 	free(ptr);
-	return (new);
+	//_PUTSTR_(BLUE"realloc: out"RESET);
+	return (new_ptr);
 }
-*/

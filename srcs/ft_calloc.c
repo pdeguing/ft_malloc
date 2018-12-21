@@ -1,27 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_free.c                                          :+:      :+:    :+:   */
+/*   ft_calloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pdeguing <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/12/12 12:34:09 by pdeguing          #+#    #+#             */
-/*   Updated: 2018/12/20 18:02:37 by pdeguing         ###   ########.fr       */
+/*   Created: 2018/12/19 10:29:51 by pdeguing          #+#    #+#             */
+/*   Updated: 2018/12/20 18:38:28 by pdeguing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <ft_mman.h>
 
-void		free(void *ptr)
+void	*calloc(size_t count, size_t size)
 {
-	t_zone	*zone;
+	size_t	alloc_size;
+	void	*ptr;
 
-	//_PUTSTR_(BLUE"free: in"RESET);
-	zone = get_zone(ptr);
-	if (!zone)
-		return ;
-	free_zone_free_list_add(zone, ptr);
-	//if (zone->free_size == zone->size - T_ZONE_SIZE)
-	//	free_zone_unmap(zone);
-	//_PUTSTR_(BLUE"free: out"RESET);
+	_PUTSTR_(BLUE"calloc: in"RESET);
+	if (!count || !size)
+		return (NULL);
+	alloc_size = count * size;
+	ptr = malloc(alloc_size);
+	if (!ptr)
+		return (NULL);
+	ft_bzero(ptr, alloc_size);
+	_PUTSTR_(BLUE"calloc: out"RESET);
+	return (ptr);
 }

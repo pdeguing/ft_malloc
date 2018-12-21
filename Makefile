@@ -6,7 +6,7 @@
 #    By: pdeguing <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/12/07 11:01:28 by pdeguing          #+#    #+#              #
-#    Updated: 2018/12/13 14:13:07 by pdeguing         ###   ########.fr        #
+#    Updated: 2018/12/20 17:47:45 by pdeguing         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,9 @@ CC				:= gcc
 CFLAGS			:= -Wall -Wextra -Werror
 
 
-ALL				:= ft_malloc.c ft_free.c ft_realloc.c
+ALL				:= ft_malloc.c ft_free.c ft_realloc.c show_alloc_mem.c\
+					malloc_zone.c free_zone.c zone_helpers.c
+
 SRCS			:= $(addprefix $(SRCDIR)/, $(ALL))
 
 all: $(LIBFT) $(NAME) test
@@ -37,18 +39,18 @@ $(NAME):
 	@ ln -sf $@ libft_malloc.so
 
 test: $(LIBFT)
-	@ $(CC) $(CFLAGS) $(INCLUDES) $(LIBFT) unit_test.c -o unit_test
+	@ $(CC) $(CFLAGS) $(INCLUDES) $(LIBFT) $(SRCS) test_main.c -o test_main
 
 clean:
 	@ /bin/rm -rf $(OBJDIR)
 
 fclean: clean
 	@ /bin/rm -f $(NAME)
-	@ /bin/rm -f unit_test
 	@ /bin/rm -f libft_malloc.so
+	@ /bin/rm -f test_main
 	@ cd libft/ && make fclean
 
-re: fclean all test
+re: fclean all
 
 norm:
 	@ norminette *.c *.h
