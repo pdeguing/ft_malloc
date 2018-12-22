@@ -6,7 +6,7 @@
 /*   By: pdeguing <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/18 15:17:19 by pdeguing          #+#    #+#             */
-/*   Updated: 2018/12/20 12:44:24 by pdeguing         ###   ########.fr       */
+/*   Updated: 2018/12/22 15:25:49 by pdeguing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,33 +14,56 @@
 
 void		print_free_list(t_free *block)
 {
-	_PUTSTR_(PINK);
 	if (!block)
-		_PUTSTR_("		free_list is empty");
+		_PUTSTR_("free_list is empty");
 	while (block)
 	{
-		_PUTNBR_("		block_address", (int)block);
-		_PUTNBR_("		block->size", block->size);
+		ft_printf("%p - %p : %d bytes\n", block,
+				block + block->size, block->size);
 		block = block->next;
 	}
-	_PUTSTR_(RESET);
 }
 
 void		print_zone(t_zone *zone)
 {
-	_PUTSTR_(BLUE);
-	_PUTNBR_("	zone_address", (int)zone);
-	_PUTNBR_("	zone_size", zone->size);
-	_PUTNBR_("	free_size", zone->free_size);
-	_PUTFREE_(zone->list);
-	_PUTSTR_(RESET);
+	t_free	*block;
+	size_t	read_size;
+
+	read_size = T_ZONE_SIZE;
+	block = (t_free *)((char *)zone + T_ZONE_SIZE);
+	while (read_size < zone->size)
+	{
+		if (block->size & 1)
+			ft_putstr(RED);
+		else
+			ft_putstr(GREEN);
+		ft_printf("%p - %p : %d bytes\n", block,
+				(char *)block + (block->size & BIT_FREE), block->size);
+		ft_putstr(RESET);
+		read_size += (block->size & BIT_FREE);
+		block = (t_free *)((char *)block + (block->size & BIT_FREE));
+	}
+}
+
+void		print_list(t_zone *zone)
+{
+	while (zone)
+	{
+		if (zone->size == ZONE_TINY)
+			ft_printf("TINY  : ");
+		else if (zone->size == ZONE_SMALL)
+			ft_printf("SMALL : ");
+		else
+			ft_printf("LARGE : ");
+		ft_printf(" %p\n", zone);
+		print_zone(zone);
+		zone = zone->next;
+	}
 }
 
 void		show_alloc_mem(void)
 {
-	size_t	*header;
-
-	header = NULL;
-	if (!header)
-		return ;
+	print_list(g_zone_list[INDEX_TINY]);
+	print_list(g_zone_list[INDEX_SMALL]);
+	print_list(g_zone_list[INDEX_LARGE]);
 }

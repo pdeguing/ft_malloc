@@ -6,7 +6,7 @@
 /*   By: pdeguing <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/20 15:58:29 by pdeguing          #+#    #+#             */
-/*   Updated: 2018/12/20 17:54:47 by pdeguing         ###   ########.fr       */
+/*   Updated: 2018/12/22 14:48:27 by pdeguing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,13 +40,12 @@ static void		free_zone_free_list_insert(t_zone *zone, t_free *new_block)
 	}
 }
 
-void	free_zone_free_list_add(t_zone *zone, void *ptr)
+void			free_zone_free_list_add(t_zone *zone, void *ptr)
 {
 	t_free	*new_block;
 
 	new_block = (t_free *)((char *)ptr - SIZE_T_SIZE);
 	zone->free_size += new_block->size;
-	//_PUTNBR_(PINK"free: ptr_size"RESET, new_block->size);
 	new_block->size &= BIT_FREE;
 	new_block->next = NULL;
 	if (!zone->list)

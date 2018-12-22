@@ -6,7 +6,7 @@
 /*   By: pdeguing <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/13 09:37:40 by pdeguing          #+#    #+#             */
-/*   Updated: 2018/12/20 17:04:36 by pdeguing         ###   ########.fr       */
+/*   Updated: 2018/12/22 15:32:07 by pdeguing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 
 # define BLACK					"\x1b[1m"
 # define BLUE					"\x1b[0;34m"
-# define RED					"\x1b[1;31m"
+# define RED					"\x1b[0;31m"
+# define GREEN					"\x1b[0;32m"
 # define PINK					"\x1b[1;35m"
 # define WHITE					"\x1b[1;37m"
 # define RESET					"\x1b[0m"
@@ -24,12 +25,7 @@
 # include <sys/resource.h>
 # include <libft.h>
 
-# define _PUTSTR_(str)			ft_putendl(str);
-
-# define _PUTNBR_(name, n)		ft_putstr(name);\
-								ft_putstr(" = ");\
-								ft_putnbr(n);\
-								ft_putchar('\n');
+# define _PUTSTR_(str)			ft_putendl_fd(str, 2);
 
 # define _PUTZONE_(zone)		print_zone(zone);
 # define _PUTFREE_(list)		print_free_list(list);
@@ -79,20 +75,28 @@ struct							s_zone
 # define INDEX_SMALL			1
 # define INDEX_LARGE			2
 
+# define INDEX_CMP(a, b)		(get_index(a & BIT_FREE) == get_index(b))
+
 t_zone							*g_zone_list[3];
 
 size_t							get_zone_size(size_t size);
-int								get_zone_list_index(size_t size);
+int								get_index(size_t size);
 t_zone							*get_zone(void *ptr);
 
-void							*malloc_zone_request_block(size_t request_size);
+size_t							align_request_size(size_t size);
 
-void							free_zone_free_list_add(t_zone *zone, void *ptr);
+void							*malloc_zone_request_block(size_t request_size);
+void							malloc_zone_defrag(t_free *block);
+void							*malloc_zone_free_list_retrieve(t_zone *zone,
+		t_free *free_block, t_free *prev_block, size_t request_size);
+
+void							free_zone_free_list_add(t_zone *zone,
+		void *ptr);
 
 void							free(void *ptr);
 void							*malloc(size_t size);
 void							*realloc(void *ptr, size_t size);
-//void							*calloc(size_t count, size_t size);
+void							*calloc(size_t count, size_t size);
 
 void							show_alloc_mem(void);
 

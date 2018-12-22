@@ -6,7 +6,7 @@
 /*   By: pdeguing <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/20 10:41:16 by pdeguing          #+#    #+#             */
-/*   Updated: 2018/12/20 17:36:05 by pdeguing         ###   ########.fr       */
+/*   Updated: 2018/12/22 15:24:52 by pdeguing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ size_t	get_zone_size(size_t size)
 	return (ZONE_LARGE(size));
 }
 
-int		get_zone_list_index(size_t size)
+int		get_index(size_t size)
 {
 	if (IS_TINY(size))
 		return (INDEX_TINY);
@@ -34,6 +34,8 @@ t_zone	*get_zone(void *ptr)
 {
 	t_zone	*zone;
 	int		i;
+	t_free	*block;
+	size_t	count;
 
 	i = 0;
 	while (i < 3)
@@ -41,8 +43,15 @@ t_zone	*get_zone(void *ptr)
 		zone = g_zone_list[i];
 		while (zone)
 		{
-			if ((void *)(zone + 1) <= ptr && ptr < (void *)((char *)zone + zone->size))
-				return (zone);
+			count = T_ZONE_SIZE;
+			block = (t_free *)((char *)zone + T_ZONE_SIZE);
+			while (count < zone->size)
+			{
+				if ((void *)((char *)block + SIZE_T_SIZE) == ptr)
+					return (zone);
+				count += (block->size & BIT_FREE);
+				block = (t_free *)((char *)block + (block->size & BIT_FREE));
+			}
 			zone = zone->next;
 		}
 		i++;

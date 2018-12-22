@@ -1,28 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_calloc.c                                        :+:      :+:    :+:   */
+/*   malloc_zone_defrag.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pdeguing <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/12/19 10:29:51 by pdeguing          #+#    #+#             */
-/*   Updated: 2018/12/22 15:34:26 by pdeguing         ###   ########.fr       */
+/*   Created: 2018/12/21 14:02:34 by pdeguing          #+#    #+#             */
+/*   Updated: 2018/12/21 14:22:25 by pdeguing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <ft_mman.h>
 
-void	*calloc(size_t count, size_t size)
+void		malloc_zone_defrag(t_free *block)
 {
-	size_t	alloc_size;
-	void	*ptr;
-
-	if (!count || !size)
-		return (NULL);
-	alloc_size = count * size;
-	ptr = malloc(alloc_size);
-	if (!ptr)
-		return (NULL);
-	ft_bzero(ptr, alloc_size);
-	return (ptr);
+	if (!block)
+		return ;
+	while (block && block->next)
+	{
+		if (block + block->size == block->next)
+		{
+			block->size += block->next->size;
+			block->next = block->next->next;
+		}
+		block = block->next;
+	}
 }

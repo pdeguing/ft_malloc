@@ -6,7 +6,7 @@
 /*   By: pdeguing <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/20 10:42:34 by pdeguing          #+#    #+#             */
-/*   Updated: 2018/12/20 18:30:46 by pdeguing         ###   ########.fr       */
+/*   Updated: 2018/12/22 15:31:10 by pdeguing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,42 +29,35 @@ static t_zone	*malloc_zone_create(size_t zone_size)
 	return (zone);
 }
 
-static void	*malloc_zone_free_list_retrieve(t_zone *zone, t_free *free_block, t_free *prev_block, size_t request_size)
+void			*malloc_zone_free_list_retrieve(t_zone *zone,
+		t_free *free_block, t_free *prev_block, size_t request_size)
 {
 	t_free	*new_block;
 	void	*ptr;
 
 	new_block = free_block;
-	//_PUTNBR_("free_block->size", new_block->size);
 	if (free_block->size > request_size)
 	{
 		free_block = (t_free *)((char *)free_block + request_size);
 		free_block->size = new_block->size - request_size;
 		free_block->next = new_block->next;
-		new_block->size = request_size;
 		new_block->next = free_block;
 	}
 	if (prev_block)
 		prev_block->next = new_block->next;
 	else
 		zone->list = new_block->next;
+	new_block->size = request_size | BIT_ALLOC;
 	ptr = (void *)((char *)new_block + SIZE_T_SIZE);
-	//_PUTNBR_("new_block->size", new_block->size);
-	new_block = NULL;
-	new_block = (t_free *)((char *)ptr - SIZE_T_SIZE);
-	//_PUTNBR_("ptr->size", new_block->size);
 	return (ptr);
 }
 
-static void	*malloc_zone_retrieve_block(t_zone *zone, size_t request_size)
+static void		*zone_retrieve_block(t_zone *zone, size_t request_size)
 {
 	void	*ptr;
 	t_free	*free_block;
 	t_free	*prev_block;
 
-	//_PUTNBR_(PINK"zone->free_size"RESET, zone->free_size);
-	//_PUTNBR_(PINK"request_size"RESET, request_size);
-	//_PUTFREE_(zone->list);
 	if (!zone->list || zone->free_size < request_size)
 		return (NULL);
 	ptr = NULL;
@@ -73,22 +66,21 @@ static void	*malloc_zone_retrieve_block(t_zone *zone, size_t request_size)
 	while (free_block && !ptr)
 	{
 		if (free_block->size >= request_size)
-			ptr = malloc_zone_free_list_retrieve(zone, free_block, prev_block, request_size);
+			ptr = malloc_zone_free_list_retrieve(zone, free_block,
+					prev_block, request_size);
 		prev_block = free_block;
 		free_block = free_block->next;
 	}
-	//if (!ptr)
-	//{
-	//	malloc_zone_defrag(zone);
-	//	ptr = malloc_zone_retrieve_block(zone, request_size);
-	//}
+	if (!ptr)
+	{
+		malloc_zone_defrag(zone->list);
+		ptr = zone_retrieve_block(zone, request_size);
+	}
 	zone->free_size -= request_size;
-	//_PUTNBR_("zone->free_size", zone->free_size);
-	//_PUTFREE_(zone->list);
 	return (ptr);
 }
 
-static void	malloc_zone_list_add(int index, t_zone *new_zone)
+static void		malloc_zone_list_add(int index, t_zone *new_zone)
 {
 	t_zone	*head;
 
@@ -109,21 +101,19 @@ static void	malloc_zone_list_add(int index, t_zone *new_zone)
 	}
 }
 
-void	*malloc_zone_request_block(size_t request_size)
+void			*malloc_zone_request_block(size_t request_size)
 {
 	void	*ptr;
 	t_zone	*zone;
 	size_t	zone_size;
 	int		zone_list_index;
 
-	//_PUTNBR_("request_size", request_size);
 	ptr = NULL;
-	zone_list_index = get_zone_list_index(request_size);
-	//_PUTNBR_("zone_list_index", zone_list_index);
+	zone_list_index = get_index(request_size);
 	zone = g_zone_list[zone_list_index];
 	while (zone && !ptr)
 	{
-		ptr = malloc_zone_retrieve_block(zone, request_size);
+		ptr = zone_retrieve_block(zone, request_size);
 		zone = zone->next;
 	}
 	if (!ptr)
@@ -131,10 +121,8 @@ void	*malloc_zone_request_block(size_t request_size)
 		zone_size = get_zone_size(request_size);
 		if (IS_LARGE(request_size))
 			request_size -= T_ZONE_SIZE;
-		//_PUTNBR_("zone_size", zone_size);
 		zone = malloc_zone_create(zone_size);
-		//_PUTZONE_(zone);
-		ptr = malloc_zone_retrieve_block(zone, request_size);
+		ptr = zone_retrieve_block(zone, request_size);
 		malloc_zone_list_add(zone_list_index, zone);
 	}
 	return (ptr);
