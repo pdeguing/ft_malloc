@@ -6,7 +6,7 @@
 /*   By: pdeguing <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/12 12:35:03 by pdeguing          #+#    #+#             */
-/*   Updated: 2018/12/21 17:09:25 by pdeguing         ###   ########.fr       */
+/*   Updated: 2018/12/22 15:22:58 by pdeguing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,100 +18,114 @@
 ** it is continuous with our block and is now part of it.
 */
 
-static void	*realloc_block_enlarge(t_zone *zone, t_free *block, size_t request_size)
+static void	*full_block(t_zone *zone, t_free *free,
+		t_free *prev_block, size_t request)
 {
-	t_free	*free_block;
+	t_free	*block;
+
+	block = prev_block->next;
+	zone->free_size -= free->size;
+	if (prev_block)
+		prev_block->next = free->next;
+	else
+		zone->list = free->next;
+	block->size = request | BIT_ALLOC;
+	return ((char *)block + SIZE_T_SIZE);
+}
+
+static void	*part_block(t_zone *zone, t_free *free,
+		t_free *prev_block, size_t request)
+{
+	size_t	spare;
+	t_free	*block;
+
+	block = prev_block->next;
+	spare = free->size - request - (block->size & BIT_FREE);
+	zone->free_size -= (free->size - spare);
+	block->next = free->next;
+	free = (t_free *)((char *)free + request
+			- (block->size & BIT_FREE));
+	free->size = spare;
+	free->next = block->next;
+	if (prev_block)
+		prev_block->next = free;
+	else
+		zone->list = free;
+	block->size = request | BIT_ALLOC;
+	return ((char *)block + SIZE_T_SIZE);
+}
+
+static void	*block_enlarge(t_zone *zone, t_free *block,
+		size_t request)
+{
+	t_free	*free;
 	t_free	*prev_block;
-	size_t	spare_size;
+	size_t	spare;
 
 	if (!zone->list)
 		return (NULL);
-	free_block = zone->list;
+	free = zone->list;
 	prev_block = NULL;
-	while (free_block)
+	while (free)
 	{
-		if (free_block == (t_free *)((char *)block + (block->size & BIT_FREE) + 32))
+		if (free == (t_free *)((char *)block +
+					(block->size & BIT_FREE) + 32))
 		{
-			spare_size = free_block->size - request_size - (block->size & BIT_FREE);
-			if (spare_size == 0)
-			{
-				zone->free_size -= free_block->size;
-				if (prev_block)
-					prev_block->next = free_block->next;
-				else
-					zone->list = free_block->next;
-				block->size = request_size | BIT_ALLOC;
-				return ((char *)block + SIZE_T_SIZE);
-			}
-			else if (spare_size > 0)
-			{
-				zone->free_size -= (free_block->size - spare_size);
-				block->next = free_block->next;
-				free_block = (t_free *)((char *)free_block + request_size - (block->size & BIT_FREE));
-				free_block->size = spare_size;
-				free_block->next = block->next;
-				if (prev_block)
-					prev_block->next = free_block;
-				else
-					zone->list = free_block;
-				block->size = request_size | BIT_ALLOC;
-				return ((char *)block + SIZE_T_SIZE);
-			}
+			spare = free->size - request - (block->size & BIT_FREE);
+			if (spare == 0)
+				return (full_block(zone, free, prev_block, request));
+			else if (spare > 0)
+				return (part_block(zone, free, prev_block, request));
 			return (NULL);
 		}
-		prev_block = free_block;
-		free_block = free_block->next;
+		prev_block = free;
+		free = free->next;
 	}
 	return (NULL);
 }
 
-static void	*realloc_block_update(t_zone *zone, t_free *block, size_t request_size)
+static void	*block_update(t_zone *zone, t_free *block,
+		size_t request)
 {
 	t_free	*spare_block;
 
-	if (block->size == request_size)
+	if (block->size == request)
 		return ((char *)block + SIZE_T_SIZE);
-	if (block->size > request_size)
+	if (block->size > request)
 	{
-		spare_block = (t_free *)((char *)block + block->size - request_size);
-		spare_block->size = block->size - request_size;
-		block->size = request_size;
+		spare_block = (t_free *)((char *)block + block->size - request);
+		spare_block->size = block->size - request;
+		block->size = request;
 		free((char *)spare_block + SIZE_T_SIZE);
 		return ((char *)block + SIZE_T_SIZE);
 	}
-	return (realloc_block_enlarge(zone, block, request_size));
+	return (block_enlarge(zone, block, request));
 }
 
-void	*realloc(void *ptr, size_t size)
+void		*realloc(void *ptr, size_t size)
 {
 	t_zone	*zone;
-	t_free	*ptr_block;
+	t_free	*block;
 	void	*new_ptr;
-	size_t	request_size;
+	size_t	request;
 
 	if (!ptr)
-	{
 		return (malloc(size));
-	}
-	zone = get_zone(ptr);
-	if (!zone)
-	{
+	if (!(zone = get_zone(ptr)))
 		return (NULL);
-	}
-	ptr_block = (t_free *)((char *)ptr - SIZE_T_SIZE);
-	request_size = align_request_size(size);
+	block = (t_free *)((char *)ptr - SIZE_T_SIZE);
+	request = align_request_size(size);
 	new_ptr = NULL;
-	if (get_zone_list_index(ptr_block->size & BIT_FREE) == get_zone_list_index(request_size)
-			&& (zone->free_size >= request_size || ptr_block->size >= request_size))
-		new_ptr = realloc_block_update(zone, ptr_block, request_size);
+	if (INDEX_CMP(block->size, request) &&
+			(zone->free_size >= request || block->size >= request))
+		new_ptr = block_update(zone, block, request);
 	if (!new_ptr)
 	{
 		new_ptr = malloc(size);
 		if (!new_ptr)
-		{
 			return (NULL);
-		}
-		ft_memcpy(new_ptr, ptr, MIN((ptr_block->size & BIT_FREE) - T_FREE_SIZE, size));
+		ft_memcpy(new_ptr, ptr,
+				MIN((block->size & BIT_FREE) - T_FREE_SIZE, size));
 		free(ptr);
 	}
 	return (new_ptr);

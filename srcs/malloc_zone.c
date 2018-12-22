@@ -6,7 +6,7 @@
 /*   By: pdeguing <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/20 10:42:34 by pdeguing          #+#    #+#             */
-/*   Updated: 2018/12/22 13:08:59 by pdeguing         ###   ########.fr       */
+/*   Updated: 2018/12/22 15:31:10 by pdeguing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@ static t_zone	*malloc_zone_create(size_t zone_size)
 	return (zone);
 }
 
-void	*malloc_zone_free_list_retrieve(t_zone *zone, t_free *free_block, t_free *prev_block, size_t request_size)
+void			*malloc_zone_free_list_retrieve(t_zone *zone,
+		t_free *free_block, t_free *prev_block, size_t request_size)
 {
 	t_free	*new_block;
 	void	*ptr;
@@ -51,7 +52,7 @@ void	*malloc_zone_free_list_retrieve(t_zone *zone, t_free *free_block, t_free *p
 	return (ptr);
 }
 
-static void	*malloc_zone_retrieve_block(t_zone *zone, size_t request_size)
+static void		*zone_retrieve_block(t_zone *zone, size_t request_size)
 {
 	void	*ptr;
 	t_free	*free_block;
@@ -65,20 +66,21 @@ static void	*malloc_zone_retrieve_block(t_zone *zone, size_t request_size)
 	while (free_block && !ptr)
 	{
 		if (free_block->size >= request_size)
-			ptr = malloc_zone_free_list_retrieve(zone, free_block, prev_block, request_size);
+			ptr = malloc_zone_free_list_retrieve(zone, free_block,
+					prev_block, request_size);
 		prev_block = free_block;
 		free_block = free_block->next;
 	}
 	if (!ptr)
 	{
 		malloc_zone_defrag(zone->list);
-		ptr = malloc_zone_retrieve_block(zone, request_size);
+		ptr = zone_retrieve_block(zone, request_size);
 	}
 	zone->free_size -= request_size;
 	return (ptr);
 }
 
-static void	malloc_zone_list_add(int index, t_zone *new_zone)
+static void		malloc_zone_list_add(int index, t_zone *new_zone)
 {
 	t_zone	*head;
 
@@ -99,7 +101,7 @@ static void	malloc_zone_list_add(int index, t_zone *new_zone)
 	}
 }
 
-void	*malloc_zone_request_block(size_t request_size)
+void			*malloc_zone_request_block(size_t request_size)
 {
 	void	*ptr;
 	t_zone	*zone;
@@ -107,11 +109,11 @@ void	*malloc_zone_request_block(size_t request_size)
 	int		zone_list_index;
 
 	ptr = NULL;
-	zone_list_index = get_zone_list_index(request_size);
+	zone_list_index = get_index(request_size);
 	zone = g_zone_list[zone_list_index];
 	while (zone && !ptr)
 	{
-		ptr = malloc_zone_retrieve_block(zone, request_size);
+		ptr = zone_retrieve_block(zone, request_size);
 		zone = zone->next;
 	}
 	if (!ptr)
@@ -120,7 +122,7 @@ void	*malloc_zone_request_block(size_t request_size)
 		if (IS_LARGE(request_size))
 			request_size -= T_ZONE_SIZE;
 		zone = malloc_zone_create(zone_size);
-		ptr = malloc_zone_retrieve_block(zone, request_size);
+		ptr = zone_retrieve_block(zone, request_size);
 		malloc_zone_list_add(zone_list_index, zone);
 	}
 	return (ptr);

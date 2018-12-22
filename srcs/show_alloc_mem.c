@@ -6,7 +6,7 @@
 /*   By: pdeguing <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/18 15:17:19 by pdeguing          #+#    #+#             */
-/*   Updated: 2018/12/22 13:07:37 by pdeguing         ###   ########.fr       */
+/*   Updated: 2018/12/22 15:25:49 by pdeguing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ void		print_free_list(t_free *block)
 		_PUTSTR_("free_list is empty");
 	while (block)
 	{
-		ft_printf("%p - %p : %d bytes\n", block, block + block->size, block->size);
+		ft_printf("%p - %p : %d bytes\n", block,
+				block + block->size, block->size);
 		block = block->next;
 	}
 }
@@ -36,7 +37,8 @@ void		print_zone(t_zone *zone)
 			ft_putstr(RED);
 		else
 			ft_putstr(GREEN);
-		ft_printf("%p - %p : %d bytes\n", block, (char *)block + (block->size & BIT_FREE), block->size);
+		ft_printf("%p - %p : %d bytes\n", block,
+				(char *)block + (block->size & BIT_FREE), block->size);
 		ft_putstr(RESET);
 		read_size += (block->size & BIT_FREE);
 		block = (t_free *)((char *)block + (block->size & BIT_FREE));

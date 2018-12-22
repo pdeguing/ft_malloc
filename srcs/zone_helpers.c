@@ -6,7 +6,7 @@
 /*   By: pdeguing <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/20 10:41:16 by pdeguing          #+#    #+#             */
-/*   Updated: 2018/12/22 13:07:38 by pdeguing         ###   ########.fr       */
+/*   Updated: 2018/12/22 15:24:52 by pdeguing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ size_t	get_zone_size(size_t size)
 	return (ZONE_LARGE(size));
 }
 
-int		get_zone_list_index(size_t size)
+int		get_index(size_t size)
 {
 	if (IS_TINY(size))
 		return (INDEX_TINY);
