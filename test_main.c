@@ -6,7 +6,7 @@
 /*   By: pdeguing <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/18 15:07:12 by pdeguing          #+#    #+#             */
-/*   Updated: 2018/12/21 20:33:54 by pdeguing         ###   ########.fr       */
+/*   Updated: 2018/12/22 12:13:21 by pdeguing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ void	basic_malloc(int size)
 	str = realloc(str, size * 100);
 	//ft_putendl(str);
 	free(str);
+	show_alloc_mem();
 }
 
 int		main(void)
@@ -43,7 +44,7 @@ int		main(void)
 	ft_putendl("--------------------------------------------------");
 	ft_putendl(RED"basic_malloc()"RESET);
 	ft_putchar('\n');
-	basic_malloc(100 * 16 * 1024 * 1024);
+	basic_malloc(16 * 1024 * 1024);
 	ft_putchar('\n');
 	ft_putchar('\n');
 	ft_putendl("--------------------------------------------------");

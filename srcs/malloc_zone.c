@@ -6,7 +6,7 @@
 /*   By: pdeguing <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/20 10:42:34 by pdeguing          #+#    #+#             */
-/*   Updated: 2018/12/21 20:33:56 by pdeguing         ###   ########.fr       */
+/*   Updated: 2018/12/22 13:08:59 by pdeguing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,13 +40,13 @@ void	*malloc_zone_free_list_retrieve(t_zone *zone, t_free *free_block, t_free *p
 		free_block = (t_free *)((char *)free_block + request_size);
 		free_block->size = new_block->size - request_size;
 		free_block->next = new_block->next;
-		new_block->size = request_size | BIT_ALLOC;
 		new_block->next = free_block;
 	}
 	if (prev_block)
 		prev_block->next = new_block->next;
 	else
 		zone->list = new_block->next;
+	new_block->size = request_size | BIT_ALLOC;
 	ptr = (void *)((char *)new_block + SIZE_T_SIZE);
 	return (ptr);
 }

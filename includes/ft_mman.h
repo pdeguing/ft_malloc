@@ -6,7 +6,7 @@
 /*   By: pdeguing <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/13 09:37:40 by pdeguing          #+#    #+#             */
-/*   Updated: 2018/12/21 16:40:11 by pdeguing         ###   ########.fr       */
+/*   Updated: 2018/12/22 13:07:36 by pdeguing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 
 # define BLACK					"\x1b[1m"
 # define BLUE					"\x1b[0;34m"
-# define RED					"\x1b[1;31m"
+# define RED					"\x1b[0;31m"
+# define GREEN					"\x1b[0;32m"
 # define PINK					"\x1b[1;35m"
 # define WHITE					"\x1b[1;37m"
 # define RESET					"\x1b[0m"
