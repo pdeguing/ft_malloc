@@ -6,7 +6,7 @@
 /*   By: pdeguing <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/18 15:17:19 by pdeguing          #+#    #+#             */
-/*   Updated: 2018/12/21 11:22:32 by pdeguing         ###   ########.fr       */
+/*   Updated: 2018/12/21 20:33:52 by pdeguing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,11 @@ void		print_free_list(t_free *block)
 {
 	_PUTSTR_(PINK);
 	if (!block)
-		_PUTSTR_("		free_list is empty");
+		_PUTSTR_("free_list is empty");
 	while (block)
 	{
-		_PUTNBR_("		block_address", (int)block);
-		_PUTNBR_("		block->size", block->size);
+		_PUTNBR_("block_address", (int)block);
+		_PUTNBR_("block->size", block->size);
 		block = block->next;
 	}
 	_PUTSTR_(RESET);
@@ -28,19 +28,29 @@ void		print_free_list(t_free *block)
 
 void		print_zone(t_zone *zone)
 {
-	_PUTSTR_(BLUE);
-	_PUTNBR_("	zone_address", (int)zone);
-	_PUTNBR_("	zone_size", zone->size);
-	_PUTNBR_("	free_size", zone->free_size);
+	if (!zone)
+	{
+		_PUTSTR_("		zone is NULL");
+		return ;
+	}
 	_PUTFREE_(zone->list);
-	_PUTSTR_(RESET);
+}
+
+void		print_list(t_zone *zone)
+{
+	while (zone)
+	{
+		print_zone(zone);
+		zone = zone->next;
+	}
 }
 
 void		show_alloc_mem(void)
 {
-	size_t	*header;
-
-	header = NULL;
-	if (!header)
-		return ;
+	_PUTSTR_("TINY:");
+	print_list(g_zone_list[INDEX_TINY]);
+	_PUTSTR_("SMALL:");
+	print_list(g_zone_list[INDEX_SMALL]);
+	_PUTSTR_("LARGE:");
+	print_list(g_zone_list[INDEX_LARGE]);
 }
