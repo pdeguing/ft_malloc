@@ -6,7 +6,7 @@
 /*   By: pdeguing <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/12 12:27:35 by pdeguing          #+#    #+#             */
-/*   Updated: 2018/12/21 12:25:19 by pdeguing         ###   ########.fr       */
+/*   Updated: 2018/12/21 16:03:18 by pdeguing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,10 @@ void	*malloc(size_t size)
 	size_t			request_size;
 	void			*ptr;
 
-	//_PUTSTR_(RED"malloc: in"RESET);
-	//_PUTNBR_("size", size);
 	getrlimit(RLIMIT_DATA, &rlp);
 	request_size = align_request_size(size + SIZE_T_SIZE);
 	if (request_size > rlp.rlim_cur)
 		return (NULL);
 	ptr = malloc_zone_request_block(request_size);
-	//_PUTSTR_(RED"malloc: out"RESET);
 	return (ptr);
 }

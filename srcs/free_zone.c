@@ -6,7 +6,7 @@
 /*   By: pdeguing <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/20 15:58:29 by pdeguing          #+#    #+#             */
-/*   Updated: 2018/12/21 09:10:08 by pdeguing         ###   ########.fr       */
+/*   Updated: 2018/12/21 16:05:22 by pdeguing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ void	free_zone_free_list_add(t_zone *zone, void *ptr)
 
 	new_block = (t_free *)((char *)ptr - SIZE_T_SIZE);
 	zone->free_size += new_block->size;
-	//_PUTNBR_(PINK"free: ptr_size"RESET, new_block->size);
 	new_block->size &= BIT_FREE;
 	new_block->next = NULL;
 	if (!zone->list)

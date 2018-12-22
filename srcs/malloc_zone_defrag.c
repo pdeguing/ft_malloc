@@ -1,27 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_free.c                                          :+:      :+:    :+:   */
+/*   malloc_zone_defrag.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pdeguing <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/12/12 12:34:09 by pdeguing          #+#    #+#             */
-/*   Updated: 2018/12/21 16:40:10 by pdeguing         ###   ########.fr       */
+/*   Created: 2018/12/21 14:02:34 by pdeguing          #+#    #+#             */
+/*   Updated: 2018/12/21 14:22:25 by pdeguing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <ft_mman.h>
 
-void		free(void *ptr)
+void		malloc_zone_defrag(t_free *block)
 {
-	t_zone	*zone;
-
-	zone = get_zone(ptr);
-	if (!zone)
-	{
+	if (!block)
 		return ;
+	while (block && block->next)
+	{
+		if (block + block->size == block->next)
+		{
+			block->size += block->next->size;
+			block->next = block->next->next;
+		}
+		block = block->next;
 	}
-	free_zone_free_list_add(zone, ptr);
-	if (zone->free_size == zone->size - T_ZONE_SIZE)
-		munmap(zone, zone->size);
 }

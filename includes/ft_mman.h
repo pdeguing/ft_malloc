@@ -6,7 +6,7 @@
 /*   By: pdeguing <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/13 09:37:40 by pdeguing          #+#    #+#             */
-/*   Updated: 2018/12/21 12:30:34 by pdeguing         ###   ########.fr       */
+/*   Updated: 2018/12/21 16:40:11 by pdeguing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ t_zone							*get_zone(void *ptr);
 size_t							align_request_size(size_t size); // replace with a macro
 
 void							*malloc_zone_request_block(size_t request_size);
+void							malloc_zone_defrag(t_free *block);
 void							*malloc_zone_free_list_retrieve(t_zone *zone,
 		t_free *free_block, t_free *prev_block, size_t request_size);
 
@@ -96,7 +97,7 @@ void							free_zone_free_list_add(t_zone *zone, void *ptr);
 void							free(void *ptr);
 void							*malloc(size_t size);
 void							*realloc(void *ptr, size_t size);
-//void							*calloc(size_t count, size_t size);
+void							*calloc(size_t count, size_t size);
 
 void							show_alloc_mem(void);
 

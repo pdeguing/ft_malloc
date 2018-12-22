@@ -6,7 +6,7 @@
 #    By: pdeguing <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/12/07 11:01:28 by pdeguing          #+#    #+#              #
-#    Updated: 2018/12/20 17:47:45 by pdeguing         ###   ########.fr        #
+#    Updated: 2018/12/21 14:56:01 by pdeguing         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,8 @@ CFLAGS			:= -Wall -Wextra -Werror
 
 
 ALL				:= ft_malloc.c ft_free.c ft_realloc.c show_alloc_mem.c\
-					malloc_zone.c free_zone.c zone_helpers.c
+					malloc_zone.c free_zone.c zone_helpers.c malloc_zone_defrag.c\
+					ft_calloc.c
 
 SRCS			:= $(addprefix $(SRCDIR)/, $(ALL))
 

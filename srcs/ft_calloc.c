@@ -6,7 +6,7 @@
 /*   By: pdeguing <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/19 10:29:51 by pdeguing          #+#    #+#             */
-/*   Updated: 2018/12/20 12:26:36 by pdeguing         ###   ########.fr       */
+/*   Updated: 2018/12/21 16:03:15 by pdeguing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ void	*calloc(size_t count, size_t size)
 	size_t	alloc_size;
 	void	*ptr;
 
-	_PUTSTR_(BLUE"calloc: in"RESET);
 	if (!count || !size)
 		return (NULL);
 	alloc_size = count * size;
@@ -25,6 +24,5 @@ void	*calloc(size_t count, size_t size)
 	if (!ptr)
 		return (NULL);
 	ft_bzero(ptr, alloc_size);
-	_PUTSTR_(BLUE"calloc: out"RESET);
 	return (ptr);
 }
