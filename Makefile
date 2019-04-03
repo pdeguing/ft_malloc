@@ -30,9 +30,10 @@ ALL				:= ft_malloc.c ft_free.c ft_realloc.c show_alloc_mem.c\
 
 SRCS			:= $(addprefix $(SRCDIR)/, $(ALL))
 
-all: $(LIBFT) $(NAME) test
+all: $(LIBFT) $(NAME)
 
 $(LIBFT):
+	@ git clone https://github.com/pdeguing/libft.git
 	@ cd libft/ && make
 
 $(NAME):
@@ -55,7 +56,7 @@ fclean: clean
 	@ /bin/rm -f $(NAME)
 	@ /bin/rm -f libft_malloc.so
 	@ /bin/rm -f test_main
-	@ cd libft/ && make fclean
+	@ /bin/rm -rf libft
 
 re: fclean all
 
