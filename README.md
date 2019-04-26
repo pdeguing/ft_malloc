@@ -1,5 +1,5 @@
 # ft_malloc
-Implementation of dynamic memory allocation API to learn how it works.
+Implementation of dynamic memory allocation library to learn how it works.
 
 # API
 ``` C
